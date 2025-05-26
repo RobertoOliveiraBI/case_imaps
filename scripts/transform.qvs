@@ -1,0 +1,69 @@
+/*
+============================================================
+🗂️ SCRIPT QLIK SENSE – TRANSFORMAÇÃO
+============================================================
+
+📁 Projeto / App:      CASE IMAPS
+🧠 Objetivo:           TRANSFORMAÇÃO DOS DADOS DE VENDAS DA "Loja Super Brinquedos"
+🛠️ Responsável:        Roberto Oliveira
+📆 Data de Criação:    26/05/2025
+🕰️ Última Atualização: 26/05/2025
+
+🔧 Fontes de Dados:
+   - Arquivos csv disponibilizados
+   https://drive.google.com/drive/folders/1ElMUnhrCUeS6ePEaYD-dlWxr-Se5bsUY?usp=sharing
+
+⚠️ Observações:
+   - Projeto criado em teste de aptidão para o cargo de analista qlik sense
+
+============================================================
+*/
+
+SET vLib = 'lib://DADOS/';
+
+SET vTransformFolder = 'lib://DADOS/TRANSFORM/';
+
+//////////////////////////////////
+
+FATO:
+Load
+
+    data_venda,
+    Date(Date#(Left(data_venda, 10), 'YYYY-MM-DD'), 'DD/MM/YYYY') AS data_venda_formatada,
+    Time(Timestamp#(data_venda, 'YYYY-MM-DD hh:mm:ss'), 'hh:mm') AS hora_venda,
+    dim_produto_id,
+    dim_vendedor_id,
+    quantidade,
+    Num#(REPLACE(valor_total, '.', ',')) AS valor_total,
+    Num#(REPLACE(custo_venda, '.', ',')) AS custo,
+    Num#(REPLACE(valor_total, '.', ',')) - Num#(REPLACE(custo_venda, '.', ',')) AS margem_valor,
+    (Num#(REPLACE(valor_total, '.', ',')) - Num#(REPLACE(custo_venda, '.', ','))) / Num#(REPLACE(valor_total, '.', ',')) AS margem_percentual
+
+FROM [lib://DADOS/EXTRACT/VENDAS.qvd]
+(qvd);
+
+STORE FATO INTO [$(vTransformFolder)fato.qvd] (qvd);
+
+//////////////////////////////////////////////
+
+PRODUTOS:
+LOAD
+    ï»¿dim_produto_id AS dim_produto_id,
+    nome_produto,
+    categoria,
+    subcategoria
+FROM [lib://DADOS/EXTRACT/PRODUTOS.qvd]
+(qvd);
+
+VENDEDORES:
+LOAD
+    dim_vendedor_id,
+    nome_vendedor,
+    genero_vendedor
+FROM [lib://DADOS/EXTRACT/VENDEDORES.qvd]
+(qvd);
+
+
+STORE PRODUTOS INTO [$(vTransformFolder)PRODUTOS.qvd] (qvd);
+
+STORE VENDEDORES INTO [$(vTransformFolder)VENDEDORES.qvd] (qvd);
