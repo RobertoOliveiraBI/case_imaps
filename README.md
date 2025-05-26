@@ -10,6 +10,10 @@ A loja Super Brinquedos, em preparação para a alta temporada, busca entender m
 
 ---
 
+![Onepage](https://robertooliveira.com.br/images/onepage.png)
+
+---
+
 ## 📁 Estrutura do Repositório
 - /scripts/ → Scripts .qvs organizados por etapa (ETL, Métricas, Dashboards)
 - /qvd/ → Armazenamento de arquivos intermediários
