@@ -80,7 +80,10 @@ $(vAliasTabela):
 LOAD 
     *
 FROM [$(vLib)$(vArquivoCSV)]
-(txt, codepage is 28591, embedded labels, delimiter is ',', msq);
+(txt, utf8, embedded labels, delimiter is ',', msq);
+
+STORE $(vAliasTabela) INTO [$(vExtractFolder)$(vAliasTabela).qvd] (qvd);
+
 
 STORE $(vAliasTabela) INTO [$(vExtractFolder)$(vAliasTabela).qvd] (qvd);
 
