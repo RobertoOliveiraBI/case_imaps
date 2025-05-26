@@ -1,0 +1,86 @@
+SET ThousandSep='.';
+SET DecimalSep=',';
+SET MoneyThousandSep='.';
+SET MoneyDecimalSep=',';
+SET MoneyFormat='R$ #.##0,00;-R$ #.##0,00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='DD/MM/YYYY';
+SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
+SET FirstWeekDay=6;
+SET BrokenWeeks=1;
+SET ReferenceDay=0;
+SET FirstMonthOfYear=1;
+SET CollationLocale='pt-BR';
+SET CreateSearchIndexOnReload=0;
+SET MonthNames='jan.;fev.;mar.;abr.;mai.;jun.;jul.;ago.;set.;out.;nov.;dez.';
+SET LongMonthNames='janeiro;fevereiro;março;abril;maio;junho;julho;agosto;setembro;outubro;novembro;dezembro';
+SET DayNames='seg.;ter.;qua.;qui.;sex.;sáb.;dom.';
+SET LongDayNames='segunda-feira;terça-feira;quarta-feira;quinta-feira;sexta-feira;sábado;domingo';
+SET NumericalAbbreviation='3:k;6:M;9:G;12:T;15:P;18:E;21:Z;24:Y;-3:m;-6:μ;-9:n;-12:p;-15:f;-18:a;-21:z;-24:y';
+
+
+/*
+============================================================
+🗂️ SCRIPT QLIK SENSE – EXTRAÇÃO
+============================================================
+
+📁 Projeto / App:      CASE IMAPS
+🧠 Objetivo:           EXTRAÇÃO DOS DADOS DE VENDAS DA "Loja Super Brinquedos"
+🛠️ Responsável:        Roberto Oliveira
+📆 Data de Criação:    26/05/2025
+🕰️ Última Atualização: 26/05/2025
+
+🔧 Fontes de Dados:
+   - Arquivos csv disponibilizados
+   https://drive.google.com/drive/folders/1ElMUnhrCUeS6ePEaYD-dlWxr-Se5bsUY?usp=sharing
+
+⚠️ Observações:
+   - Projeto criado em teste de aptidão para o cargo de analista qlik sense
+
+============================================================
+*/
+
+SET vLib = 'lib://DADOS/';
+
+SET vExtractFolder = 'lib://DADOS/EXTRACT/';
+
+//////////////////////////////////////////////////////////////
+
+SET vArquivoCSV = 'fato_vendas.csv';     // Nome do arquivo CSV
+
+SET vAliasTabela = 'VENDAS';        // Nome que será usado como alias e nome do QVD
+
+$(vAliasTabela):
+LOAD 
+    *
+FROM [$(vLib)$(vArquivoCSV)]
+(txt, codepage is 28591, embedded labels, delimiter is ',', msq);
+
+STORE $(vAliasTabela) INTO [$(vExtractFolder)$(vAliasTabela).qvd] (qvd);
+
+//////////////////////////////////////////////////////////
+
+SET vArquivoCSV = 'dim_vendedor.csv';     // Nome do arquivo CSV
+SET vAliasTabela = 'VENDEDORES';        // Nome que será usado como alias e nome do QVD
+
+$(vAliasTabela):
+LOAD 
+    *
+FROM [$(vLib)$(vArquivoCSV)]
+(txt, codepage is 28591, embedded labels, delimiter is ',', msq);
+
+STORE $(vAliasTabela) INTO [$(vExtractFolder)$(vAliasTabela).qvd] (qvd);
+
+//////////////////////////////////////////////////
+
+SET vArquivoCSV = 'dim_produto.csv';     // Nome do arquivo CSV
+SET vAliasTabela = 'PRODUTOS';        // Nome que será usado como alias e nome do QVD
+
+$(vAliasTabela):
+LOAD 
+    *
+FROM [$(vLib)$(vArquivoCSV)]
+(txt, codepage is 28591, embedded labels, delimiter is ',', msq);
+
+STORE $(vAliasTabela) INTO [$(vExtractFolder)$(vAliasTabela).qvd] (qvd);
+
