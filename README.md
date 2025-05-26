@@ -18,7 +18,7 @@ A loja Super Brinquedos, em preparação para a alta temporada, busca entender m
 - /scripts/ → Scripts .qvs organizados por etapa (ETL, Métricas, Dashboards)
 - /qvd/ → Armazenamento de arquivos intermediários
 - /documentacao/ → Dicionário de dados, regras de negócio, plano de ação
-- /export/ → Backup do app Qlik (.qvf ou zip)
+- /Apps/ → Backup do app Qlik (.qvf ou zip)
 - /dados/ → Arquivos CSV: fato_vendas, dim_produto, dim_vendedor
 - README.md → Este documento
 ---
